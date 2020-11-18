@@ -19,11 +19,15 @@ def fetch_aws_json(url: str) -> str:
 
 def check_in_range(aws_json: str, target_ip: str):
 
-    for address_prefix in aws_json["prefixes"]:
-        subnet = ip_network(address_prefix["ip_prefix"])
+    try:
+        for address_prefix in aws_json["prefixes"]:
+            subnet = ip_network(address_prefix["ip_prefix"])
 
-        if ip_address(target_ip) in subnet:
-            return address_prefix
+            if ip_address(target_ip) in subnet:
+                return address_prefix
+    except:
+        return None
+
 
 if __name__ == "__main__":
     aws_json = fetch_aws_json('https://ip-ranges.amazonaws.com/ip-ranges.json')
